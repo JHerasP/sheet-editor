@@ -2,7 +2,7 @@ import { sheets_v4 } from "googleapis";
 import cron from "node-cron";
 import { normalice } from "../../../../TS_tools/general-utility";
 import { ENV } from "../../../config";
-import { printCronException } from "../../utils/print";
+import { printException } from "../../utils/print";
 type sheetValues = sheets_v4.Schema$ValueRange;
 const SHEET_INFO = ENV.sheetConfig;
 
@@ -13,7 +13,11 @@ export function checkValidCron(cronTimer?: string) {
 }
 
 export function notValidCron() {
-  printCronException(notValidCron.name, "Cron configuration is not valid");
+  printException(notValidCron.name, "Cron configuration is not valid");
+}
+
+export function notValidTelegramInfo() {
+  printException(notValidTelegramInfo.name, "Missing telegram info");
 }
 
 export function sheetNotFound() {

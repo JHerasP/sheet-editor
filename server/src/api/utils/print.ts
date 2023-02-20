@@ -1,6 +1,6 @@
 import { formatDate } from "./formatDates";
 
-export function printCronException(functionName: string, ...args: string[]) {
+export function printException(functionName: string, ...args: string[]) {
   console.info();
   console.info(`🔸 🔸 🔸 ${functionName} 🔸 🔸 🔸`);
   console.info();

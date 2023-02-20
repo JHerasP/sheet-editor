@@ -8,7 +8,7 @@ const envInfo = process.env;
 const ENV = {
   port: envInfo.PROJECT_PORT,
   cronExpresion: envInfo.CRON_EXPRESION,
-  esetCronExpresion: envInfo.RESET_CRON_EXPRESION,
+  resetCronExpresion: envInfo.RESET_CRON_EXPRESION,
   sheetConfig: {
     id: envInfo.SHEET_ID,
     name: envInfo.SHEET_NAME,
@@ -20,6 +20,10 @@ const ENV = {
     wedneeday: envInfo.WEEK_WEDNESDAY,
     thursday: envInfo.WEEK_THURSDAY,
     friday: envInfo.WEEK_FRIDAY,
+  },
+  telegram: {
+    token: envInfo.TELEGRAM_TOKEN,
+    chatId: envInfo.TELEGRAM_CHAT_ID,
   },
 };
 const freezedENV = Object.freeze(ENV);
