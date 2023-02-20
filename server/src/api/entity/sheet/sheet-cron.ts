@@ -13,17 +13,14 @@ export const startCron = () => {
   if (!validCrom || !validResetCrom) return notValidCron();
 
   const newDate = formatDate(new Date());
-  printCronInfo(startCron.name, `Crom started at ${newDate}`);
+  printCronInfo(startCron.name, `Cron started at ${newDate}`);
 
-  let sleepCron = false;
-
-  cron.schedule(validCrom, () => {
-    if (sleepCron) return;
+  const job = cron.schedule(validCrom, () => {
     printCronAction();
 
     cronHandler()
       .then(() => {
-        sleepCron = true;
+        job.stop();
         const interval = parseExpression(validResetCrom).next().toDate();
 
         printCronInfo(cron.schedule.name, `Sheet eddited, setting Cron to sleep until ${formatDate(interval)}`);
@@ -32,10 +29,9 @@ export const startCron = () => {
   });
 
   cron.schedule(validResetCrom, () => {
-    if (sleepCron) {
-      const restartCromDate = formatDate(new Date());
-      printCronInfo("Restarting crom", `Crom restarted at ${restartCromDate}`);
-      sleepCron = false;
-    }
+    job.start();
+
+    const restartCromDate = formatDate(new Date());
+    printCronInfo("Restarting cron", `Cron restarted at ${restartCromDate}`);
   });
 };
