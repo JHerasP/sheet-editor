@@ -2,3 +2,4 @@ node_modules
 .env
 keys.env
 server/dist
+server/*.tar
