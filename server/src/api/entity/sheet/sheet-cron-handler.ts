@@ -1,9 +1,8 @@
-import { ENV } from "../../../config";
+import { TConfigData } from "../telegram-bot/Bot";
 import {
   checkIfIsMyRow,
   checkIfRowHasValues,
   checkSheetValues,
-  missingWeekConfiguration,
   notValidRow,
   rowFilledAlready,
   sheetNotFound,
@@ -11,10 +10,8 @@ import {
 } from "./sheet-error-handler";
 import { getSheetValues, postSheetValues } from "./sheet-service";
 
-const SHEET_INFO = ENV.sheetConfig;
-const { monday, tuesday, wedneeday, thursday, friday } = SHEET_INFO;
-
-export const cronHandler = async () => {
+export const cronHandler = async (configData: TConfigData) => {
+  const { Monday, Tuesday, Wednesday, Thursday, Friday } = configData;
   const sheet = await getSheetValues();
   if (!sheet) return sheetNotFound();
 
@@ -29,7 +26,5 @@ export const cronHandler = async () => {
   const hasValues = checkIfRowHasValues(sheetValues);
   if (hasValues) return rowFilledAlready();
 
-  if (monday && tuesday && wedneeday && thursday && friday)
-    return await postSheetValues([[monday, tuesday, wedneeday, thursday, friday]]);
-  else return missingWeekConfiguration();
+  return await postSheetValues([[Monday, Tuesday, Wednesday, Thursday, Friday]]);
 };

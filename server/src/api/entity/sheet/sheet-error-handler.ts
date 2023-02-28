@@ -52,7 +52,3 @@ export function checkIfRowHasValues(cells: string[]): boolean {
 export function rowFilledAlready() {
   throw [rowFilledAlready.name, "The row is valid but it has values"];
 }
-
-export function missingWeekConfiguration() {
-  throw [missingWeekConfiguration.name, "Missing week configuration"];
-}
