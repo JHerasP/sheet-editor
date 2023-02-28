@@ -1,120 +1,83 @@
 import TelegramBot from "node-telegram-bot-api";
-import { ENV } from "../../../config";
-const { telegram } = ENV;
-const { token } = telegram;
-const seatOptions = [
-  "Teletrabajo",
-  "Presencial",
-  "Vacaciones",
-  "No sabe",
-  "A1",
-  "A2",
-  "A3",
-  "A4",
-  "A5",
-  "B1",
-  "B2",
-  "B3",
-  "B4",
-  "B5",
-  "C1",
-  "C2",
-  "C3",
-  "D1",
-  "D2",
-  "D3",
-] as const;
-type seatOption = typeof seatOptions[number];
+import { awaitResolver } from "../../../../TS_tools/general-utility";
+import BOT_REGREX from "../../utils/regrex";
+import { postSheetValues } from "../sheet/sheet-service";
+import TELEGRAM_KEYBOARD from "./keyboard";
+import { seatOption, TWeekConfiguration, weekConfiguration, weekDay } from "./weekConfiguration";
+const { config, weekDays, weekOptions, writeSheet } = BOT_REGREX;
+const TK = TELEGRAM_KEYBOARD;
 
-const seatText = seatOptions.map((option) => ({ text: option }));
+export class SheetController {
+  private sheetConfiguration: TWeekConfiguration = weekConfiguration;
+  private telegramBot: TelegramBot;
 
-const weekDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"] as const;
-type weekDay = typeof weekDays[number];
+  constructor(telegramBot: TelegramBot) {
+    this.telegramBot = telegramBot;
+  }
 
-export type TConfigData = Record<weekDay, seatOption>;
+  getWeekConfig() {
+    return this.sheetConfiguration;
+  }
 
-const configData: Record<weekDay, seatOption> = {
-  Monday: "Teletrabajo",
-  Tuesday: "Presencial",
-  Wednesday: "Teletrabajo",
-  Thursday: "Teletrabajo",
-  Friday: "Presencial",
-};
+  setWeekConfig(key: weekDay, value: seatOption) {
+    if (value !== "Remove") this.sheetConfiguration[key] = value;
+    /**
+     * TODO
+     * I havent found an easy way to make a regrex expression from telegram to detect empty spaces as a message response.
+     * However, I have to send a blank space to google's API in order to empty a cell.
+     */ else this.sheetConfiguration[key] = " " as seatOption;
+  }
 
-const bot = new TelegramBot(token || "", { polling: true });
+  sendActualConfig(chatId: number) {
+    const message = Object.entries(this.sheetConfiguration)
+      .map(([key, value]) => `- ${key} : ${value} \n`)
+      .join("");
 
-function getBot() {
-  let selectedDay: string | undefined;
-  let selectedValue: string | undefined;
+    return this.telegramBot.sendMessage(chatId, `Actual config:\n${message}`);
+  }
 
-  bot.onText(/config/, (msg) => {
-    const chatId = msg.chat.id;
-    const keyBoard: TelegramBot.KeyboardButton[][] = [
-      [{ text: "Monday" }, { text: "Tuesday" }, { text: "Wednesday" }, { text: "Thursday" }, { text: "Friday" }],
-    ];
+  textSubscribers() {
+    let selectedDay: weekDay | undefined;
+    let selectedValue: seatOption | undefined;
 
-    const contactKeyboardTwo: TelegramBot.SendMessageOptions = {
-      reply_markup: {
-        force_reply: true,
-        resize_keyboard: true,
-        one_time_keyboard: true,
-        keyboard: keyBoard,
-      },
-    };
-    const message = Object.entries(configData).map(([key, value]) => `- ${key} : ${value} \n`);
-    const m = message.join("");
-
-    bot.sendMessage(chatId, `Actual config:\n${m}`);
-    bot.sendMessage(chatId, "Select a day of the week", contactKeyboardTwo);
-  });
-
-  bot.onText(
-    /^(?:sun(?:day)?|mon(?:day)?|tue(?:sday)?|wed(?:nesday)?|thu(?:rsday)?|fri(?:day)?|sat(?:urday)?)$/i,
-    (msg) => {
+    this.telegramBot.onText(config, async (msg) => {
       const chatId = msg.chat.id;
-      selectedDay = msg.text;
+      await this.sendActualConfig(chatId);
+      this.telegramBot.sendMessage(chatId, "Select a day of the week", TK.weekDays);
+    });
 
-      const arrat = [...seatText];
+    this.telegramBot.onText(weekDays, (msg) => {
+      const chatId = msg.chat.id;
+      selectedDay = msg.text as weekDay;
 
-      const petete = arrat.splice(4);
-      const peteteA = petete.splice(5);
-      const peteteB = peteteA.splice(5);
-      const peteteC = peteteB.splice(3);
-      const peteteD = peteteC.splice(3);
-      const keyBoard: TelegramBot.KeyboardButton[][] = [arrat, petete, peteteA, peteteB, peteteC, peteteD];
+      this.telegramBot.sendMessage(chatId, "Select a seat", TK.seats);
+    });
 
-      const contactKeyboardTwo: TelegramBot.SendMessageOptions = {
-        reply_markup: {
-          force_reply: true,
-          resize_keyboard: true,
-          one_time_keyboard: true,
-          keyboard: keyBoard,
-        },
-      };
+    this.telegramBot.onText(weekOptions, async (msg) => {
+      const chatId = msg.chat.id;
+      selectedValue = msg.text as seatOption;
 
-      console.log(seatText);
+      if (selectedDay && selectedValue) this.setWeekConfig(selectedDay, selectedValue);
 
-      bot.sendMessage(chatId, "Select a seat", contactKeyboardTwo);
-    }
-  );
+      await this.telegramBot.sendMessage(chatId, "Config saved!");
+      await this.sendActualConfig(chatId);
+      this.telegramBot.sendMessage(chatId, "/config");
+    });
 
-  bot.onText(/^(?:[A-D][1-9]?|No sabe?|Vacaciones?|Presencial?|Teletrabajo?)$/, (msg) => {
-    const chatId = msg.chat.id;
-    selectedValue = msg.text;
+    this.telegramBot.onText(writeSheet, async (msg) => {
+      const chatId = msg.chat.id;
 
-    if (selectedDay && selectedValue) {
-      configData[selectedDay] = selectedValue;
-    }
+      const [_, error] = await awaitResolver(this.writeSheet());
 
-    bot.sendMessage(chatId, "Config saved!");
-    const message = Object.entries(configData).map(([key, value]) => `- ${key} : ${value} \n`);
-    const m = message.join("");
+      if (!error) this.telegramBot.sendMessage(chatId, "Everything good");
+      else this.telegramBot.sendMessage(chatId, "Burp");
 
-    bot.sendMessage(chatId, `Actual config:\n${m}`);
-    bot.sendMessage(chatId, "/config");
-  });
+      this.telegramBot.sendMessage(chatId, "/config");
+    });
+  }
 
-  return { configData, bot };
+  async writeSheet() {
+    const { Monday, Tuesday, Wednesday, Thursday, Friday } = this.sheetConfiguration;
+    await postSheetValues([[Monday, Tuesday, Wednesday, Thursday, Friday]]);
+  }
 }
-
-export default getBot;

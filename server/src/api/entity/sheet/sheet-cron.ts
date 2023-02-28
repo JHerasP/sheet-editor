@@ -1,16 +1,20 @@
 import { parseExpression } from "cron-parser";
 import cron from "node-cron";
+import TelegramBot from "node-telegram-bot-api";
 import { ENV } from "../../../config";
 import { formatDate } from "../../utils/formatDates";
 import { printCronAction, printCronInfo, printException } from "../../utils/print";
-import getBot from "../telegram-bot/Bot";
+import { SheetController } from "../telegram-bot/Bot";
 import { cronHandler } from "./sheet-cron-handler";
 import { checkValidCron, notValidCron, notValidTelegramInfo } from "./sheet-error-handler";
 const { cronExpresion, resetCronExpresion, telegram } = ENV;
 const { chatId, token } = telegram;
 
 export const startCron = () => {
-  const { configData, bot } = getBot();
+  const sheetController = new SheetController(new TelegramBot(token || "", { polling: true }));
+  sheetController.textSubscribers();
+  const configData = sheetController.getWeekConfig();
+
   const validCrom = checkValidCron(cronExpresion);
   const validResetCrom = checkValidCron(resetCronExpresion);
 
@@ -33,7 +37,6 @@ export const startCron = () => {
 
         const menssage = `(ﾉ◕ヮ◕)ﾉ Sheet edited, setting Cron to sleep until ${formatDate(interval)}`;
 
-        bot.sendMessage(chatId, menssage);
         printCronInfo(cron.schedule.name, menssage);
       })
       .catch(([functionName, errorMessage]) => printException(functionName, errorMessage));
@@ -42,6 +45,7 @@ export const startCron = () => {
   cron.schedule(validResetCrom, () => {
     if (jobRunning) return;
     job.start();
+
     jobRunning = true;
 
     const restartCromDate = formatDate(new Date());

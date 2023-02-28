@@ -1,4 +1,4 @@
-import { TConfigData } from "../telegram-bot/Bot";
+import { TWeekConfiguration } from "../telegram-bot/weekConfiguration";
 import {
   checkIfIsMyRow,
   checkIfRowHasValues,
@@ -10,7 +10,7 @@ import {
 } from "./sheet-error-handler";
 import { getSheetValues, postSheetValues } from "./sheet-service";
 
-export const cronHandler = async (configData: TConfigData) => {
+export const cronHandler = async (configData: TWeekConfiguration) => {
   const { Monday, Tuesday, Wednesday, Thursday, Friday } = configData;
   const sheet = await getSheetValues();
   if (!sheet) return sheetNotFound();
