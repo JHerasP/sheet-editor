@@ -14,11 +14,6 @@ const ENV = {
     readCells: envInfo.SHEET_RANGE_READ!,
     writeCells: envInfo.SHEET_RANGE_WRITE!,
     employeeName: envInfo.EMPLOYEE_NAME!,
-    monday: envInfo.WEEK_MONDAY!,
-    tuesday: envInfo.WEEK_TUESDAY!,
-    wedneeday: envInfo.WEEK_WEDNESDAY!,
-    thursday: envInfo.WEEK_THURSDAY!,
-    friday: envInfo.WEEK_FRIDAY!,
   },
   telegram: {
     token: envInfo.TELEGRAM_TOKEN!,

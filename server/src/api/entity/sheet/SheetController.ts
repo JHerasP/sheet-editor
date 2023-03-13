@@ -1,3 +1,4 @@
+import { getSheetValues, postSheetValues } from "./sheet-service";
 import {
   TSeatOption,
   TWeekConfiguration,
@@ -6,7 +7,6 @@ import {
   weekConfigurationInit,
   weekValuesInit,
 } from "./weekConfiguration";
-import { getSheetValues, postSheetValues } from "./sheet-service";
 
 export type cronConfiguration = { isRunning: boolean; hasError: boolean; lastError: string };
 
