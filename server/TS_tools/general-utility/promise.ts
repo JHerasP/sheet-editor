@@ -10,6 +10,7 @@
 export const awaitResolver = async <T, U>(promise: Promise<T>) => {
   try {
     const data = await promise;
+
     return [data, null] as const;
   } catch (err) {
     return [null, err as U] as const;
