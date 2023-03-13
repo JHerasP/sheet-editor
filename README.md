@@ -1,66 +1,45 @@
 # Sheet-editor
 
-Simple project to edit a spreadsheet using the google API.
+Simple project to modify a worksheet using the Google and Telegram APIs. The scope of this project is merely to extract the user from having to use a Google sheet to edit the same information each week. The Google worksheet contains the seats that the employee will need on a weekly basis.
 
 ## Description
 
-In general, the project consists on two cron that are pending to write on a specific spreadsheet. The first cron is in charge of writing the sheet and the second one is in charge of resetting the flow.
-The idea is that the writing cron is always going to try to write the sheet until he accomplish his task and then, it goes to "sleep". Afterward on a given time, the second cron "awakes" the first.
+In general, the project consists of a sheet configuration that is kept in memory and a telegram bot that is used to edit that configuration. The purpose of this setup is to contain the information that will be written into a Google sheet using the telegram as the interface.
 
-The project is not aiming to write any information on any given sheet. All the information related to which sheet and where to write is configured by environmental variable. The information that is going to be wrote just contemplates the possibility of 5 cells in the same row.
+On top of this, there is a cron service which can create a task to write the sheet with the actual configuration on a given time.
 
-Every information that is giving to the jobs is obtained from environment variables, that includes the following:
+The information that's written on the sheet consists of 5 cells with some speciffic values. Each cell represents a workweek day and the values are the phisical seats that are available at the office or the opportunity to work from home. For example:
 
-- CRON*EXPRESION = '*/30 \_ \* \* \* \*'
-- RESET_CRON_EXPRESION = '0 1 \* \* FRI'
-- SHEET_ID = ''
-- SHEET_NAME = ''
-- SHEET_RANGE_READ = '!J13:O13'
-- SHEET_RANGE_WRITE = '!K13:O13'
-- EMPLOYEE_NAME = 'John'
-- WEEK_MONDAY = "AnyString"
-- WEEK_TUESDAY = "AnyString"
-- WEEK_WEDNESDAY = "AnyString"
-- WEEK_THURSDAY = "AnyString"
-- WEEK_FRIDAY = "AnyString"
-
-- TELEGRAM_TOKEN =''
-- TELEGRAM_CHAT_ID =''
+```
+              | Monday      | Tuesday | Wednesday  | Thursday    | Friday|
+Employee name | Teletrabajo | A1      | Teletrabajo| Teletrabajo | C2    |
+```
+_Values are on spanish because the sheet language is spanish_
 
 ### How it works
 
-Fist, the project should be able to authenticate itself, for that the proper config on the Google Console has to be made first. Second, the project is going to validate all the information from the environmental variables, if they are not correct, it should show information on the console about what is wrong.
+First, the telegram bot displays a menu that contains all the options that can be done. In short, this is used as a controller/interface. In there it is possible to:
+* Edit the values that are going to be written by the user or the cron
+* Write the values on to the sheet
+* Get the actual values of the sheet
+* Activate/Disable the cron
+* Get the cron status
+* Get the last error that the cron had
 
-Considering that everything is right, the project should run both jobs at the given times, the first one is going to read/write the given sheet, an example of reading would be: \* _!J13:O13 This means 6 cells horizontally from J to O on the row 13_ \*
+In addition to that, there are a few error handeling aspects that are related to the logic of the sheet:
+* Not to overwrite the same value that is already in place
+* Not duplicate seats with another co-worker
+* Not write in to another co-worker row
 
-The scope of this project is based on the idea that the rows are going to follow the next structure:
+Any error should be shown in telegram after performing any action.
 
-```
-      J       |   K    |    L    |    M     |    N     |   O   |
-Employee name | Monday | Tuesday | Wednesday| Thursday | Friday|
-```
 
-The next action is to check from the information obtained before. First, it will check that the first cell belongs to the given \* _ Employee name _ \* The reason behind that will be explained further.
-In case that the name of the first cell does not match, no further interactions are made, and an error should be shown.
-
-If the previous case is not given, the next check that is going to be realized is the amount of values that the row has. Since, the intention is just to write the information when the cells next to the employee name are empty, this check is important.
-
-Finally, the next 5 cells will we written with the given information on each environment variable.
-
-If everything goes right, the cells are modified, the first cron will be "locked" so it won't make any more calls to the Google Api. Now is when the second cron takes place, normally, the first cron is configured to run on a fast pace, 1 time per minute or so, but the second is configured to run once per week.
-And its only action is to "unlock" the first cron, so it can run the process again.
-
-And last but not less important, when the sheet is eddited, it sends a telegram message by a bot to a given user.
-
-### Why
-
-The reason behind the creation of this project is just that my company forces me to write the same useless information every single week on Fridays. The sheet is cleaned every Friday on at a random period (more or less when my supervisor remembers it) So, every Friday, the first cron is going to attempt to fill the sheet as soon as gets emptied and sleep until the next Friday.
 
 ## Installing
 
 The project is prepared to run with Docker, however, in order to run the authentication with Gooogle, it is necessary to create an environment to work with Google Api. Therefore, the keys.env file should be placed on the root folder.
 
-After that done, on the same root folder, create an .env file with the above mentioned. Finally, just run:
+After that done, on the same root folder, create an .env file with the content on the ENV configuration file. Finally, just run:
 
 ```
 npm install
