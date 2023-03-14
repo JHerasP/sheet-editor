@@ -6,6 +6,7 @@ import { getKeyboard, TMenus } from "./keyboards";
 import NEW_TELEGRAM_KEYBOARD from "./keyboards/index";
 import { queryHandler } from "./telegramHandler";
 import { TSeatOption, TWeekDay } from "../sheet/weekConfiguration";
+import { sheetCron } from "../sheet";
 const TKA = NEW_TELEGRAM_KEYBOARD;
 
 export class TelegramChat {
@@ -20,6 +21,7 @@ export class TelegramChat {
     this.sheetController = sheetController;
     this.cronName = cronName;
     this.textSubscribers();
+    sheetCron.startService(sheetController, this, cronName);
   }
 
   setSelectedDay(day: TWeekDay) {
