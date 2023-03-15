@@ -80,7 +80,10 @@ export const getKeyboard = (
         keyboard: NEW_TELEGRAM_KEYBOARD.employeeMenu,
       };
     case "Name":
-      return;
+      return {
+        message: `🎭 Who are you? :`,
+        keyboard: NEW_TELEGRAM_KEYBOARD.employeeNamesMenu,
+      };
     case "Cells":
       return;
     case "Return":

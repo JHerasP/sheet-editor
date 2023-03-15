@@ -101,7 +101,7 @@ export const getNamesColumn = async (userName: string) => {
   let rowNumber = "";
   let emptyCells = 0;
 
-  for (let i = 0; i < 100; i++) {
+  for (let i = 1; i < 100; i++) {
     if (emptyCells > 10) break;
     await sheets.spreadsheets.values
       .get({

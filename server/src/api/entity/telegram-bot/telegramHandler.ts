@@ -55,14 +55,14 @@ export const queryHandler = async (telegram: TelegramChat, command: TMenus) => {
     case "Employee":
       return;
     case "Name":
-      return findName(telegram, "");
+      return;
     case "Cells":
       return;
     case "Return":
       return;
     default:
       caseGuard(command);
-      break;
+      return findNameSecretCode(telegram, command as any);
   }
 };
 
@@ -105,4 +105,8 @@ const findName = async (telegram: TelegramChat, userName: string) => {
 
     telegram.saveWeekCellsConfig(day, { cell: cell, seat: "Remove" });
   });
+};
+
+const findNameSecretCode = (telegram: TelegramChat, name: string) => {
+  if (name.includes("$*$")) return findName(telegram, name.replace("$*$", ""));
 };

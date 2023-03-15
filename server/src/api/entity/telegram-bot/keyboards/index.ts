@@ -3,6 +3,7 @@ import { cronStatusMenu, TCronStatusMenu } from "./cron-status-menu-keyboard";
 import { employeeMenu, TEmployeeMenu } from "./employee-menu-keyboard";
 import { getKeyboard } from "./keyboard-handler";
 import { mainMenu, TMainMenu } from "./main-menu-keyboard";
+import { employeeNamesMenu } from "./names-menu-keyboard";
 import { seatsMenu, TSeatsMenu } from "./seats-menu-keyboard";
 import { sheetMenu, TSheetMenu } from "./sheet-menu-keyboard";
 import { weekMenu, TWeekMenu } from "./week-menu-keyboard";
@@ -12,6 +13,7 @@ const NEW_TELEGRAM_KEYBOARD = {
   sheetMenu: sheetMenu,
   cronMenu: cronMenu,
   employeeMenu: employeeMenu,
+  employeeNamesMenu: employeeNamesMenu,
   daysMenu: weekMenu,
   seatsMenu: seatsMenu,
   cronStatusMenu: cronStatusMenu,
