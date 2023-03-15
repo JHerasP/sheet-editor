@@ -76,16 +76,10 @@ export const getKeyboard = (
       };
     case "Employee":
       return {
-        message: `🎭 Employee configuration :`,
-        keyboard: NEW_TELEGRAM_KEYBOARD.employeeMenu,
-      };
-    case "Name":
-      return {
         message: `🎭 Who are you? :`,
         keyboard: NEW_TELEGRAM_KEYBOARD.employeeNamesMenu,
       };
-    case "Cells":
-      return;
+
     case "Return":
       return { message: "Tell me what you want to do ヾ(•ω•`)o", keyboard: NEW_TELEGRAM_KEYBOARD.mainMenu };
     default:

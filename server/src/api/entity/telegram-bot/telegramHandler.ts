@@ -54,10 +54,7 @@ export const queryHandler = async (telegram: TelegramChat, command: TMenus) => {
       return getError(telegram);
     case "Employee":
       return;
-    case "Name":
-      return;
-    case "Cells":
-      return;
+
     case "Return":
       return;
     default:

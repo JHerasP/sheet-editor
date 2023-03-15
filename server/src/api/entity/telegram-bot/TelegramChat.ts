@@ -86,7 +86,7 @@ export class TelegramChat {
 
       if (err) this.telegramBot.answerCallbackQuery(callbackId || "", { text: err.message, show_alert: true });
       else {
-        if (giveFeedback(command))
+        if (showOperationDone(command))
           this.telegramBot.answerCallbackQuery(callbackId || "", { text: "Operation done (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧" });
       }
 
@@ -106,7 +106,7 @@ export class TelegramChat {
   }
 }
 
-const giveFeedback = (command: TMenus) => {
+const showOperationDone = (command: TMenus) => {
   if (
     command === "Get values" ||
     command === "Fill sheet" ||
