@@ -74,6 +74,15 @@ export const getKeyboard = (
         message: `📡 Cron Status \n\n Running: ${cronStatus.isRunning} \n Errors: ${cronStatus.hasError}`,
         keyboard: NEW_TELEGRAM_KEYBOARD.cronStatusMenu,
       };
+    case "Employee":
+      return {
+        message: `🎭 Employee configuration :`,
+        keyboard: NEW_TELEGRAM_KEYBOARD.employeeMenu,
+      };
+    case "Name":
+      return;
+    case "Cells":
+      return;
     case "Return":
       return { message: "Tell me what you want to do ヾ(•ω•`)o", keyboard: NEW_TELEGRAM_KEYBOARD.mainMenu };
     default:

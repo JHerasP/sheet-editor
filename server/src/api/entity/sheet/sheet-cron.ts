@@ -10,6 +10,7 @@ export const startService = (sheetController: SheetController, telegramChat: Tel
     cronExpresion,
     () => {
       if (!sheetController.getCronConfiguration().isRunning) return;
+
       postSheetValues(sheetController.getWeekConfig())
         .then(() => telegramChat.removeCron())
         .catch((err) => sheetController.setCronConfiguration({ isRunning: true, hasError: true, lastError: err }));

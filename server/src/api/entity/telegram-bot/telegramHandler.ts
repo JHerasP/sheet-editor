@@ -1,7 +1,8 @@
 import { caseGuard } from "../../../../TS_tools/general-utility";
+import { getNamesColumn } from "../sheet/sheet-service";
+import { TSeatOption, TWeekDay } from "../sheet/weekConfiguration";
 import { TMenus } from "./keyboards";
 import { TelegramChat } from "./TelegramChat";
-import { TSeatOption, TWeekDay } from "../sheet/weekConfiguration";
 
 export const queryHandler = async (telegram: TelegramChat, command: TMenus) => {
   switch (command) {
@@ -51,6 +52,12 @@ export const queryHandler = async (telegram: TelegramChat, command: TMenus) => {
       return cronStatus(telegram);
     case "Get error":
       return getError(telegram);
+    case "Employee":
+      return;
+    case "Name":
+      return findName(telegram, "");
+    case "Cells":
+      return;
     case "Return":
       return;
     default:
@@ -88,4 +95,14 @@ const fillSheet = (telegram: TelegramChat) => {
 
 const getError = (telegram: TelegramChat) => {
   throw new Error(telegram.getStatusCron().lastError);
+};
+
+const findName = async (telegram: TelegramChat, userName: string) => {
+  const columnCells = await getNamesColumn(userName);
+
+  Object.entries(columnCells).forEach((value) => {
+    const [day, cell] = value as [TWeekDay, string];
+
+    telegram.saveWeekCellsConfig(day, { cell: cell, seat: "Remove" });
+  });
 };

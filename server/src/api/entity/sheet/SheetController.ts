@@ -2,6 +2,7 @@ import { getSheetValues, postSheetValues } from "./sheet-service";
 import {
   TSeatOption,
   TWeekConfiguration,
+  TWeekConfigValues,
   TWeekDay,
   TWeekValues,
   weekConfigurationInit,
@@ -19,9 +20,12 @@ export class SheetController {
     return this.weekConfiguration;
   }
 
-  setWeekConfig(key: TWeekDay, value: TSeatOption) {
-    if (value !== "Remove") this.weekConfiguration[key].seat = value;
-    else this.weekConfiguration[key].seat = " " as TSeatOption;
+  setWeekConfig(key: TWeekDay, value: TWeekConfigValues) {
+    // TODO Find a way to empty cells
+    if (value.seat === "Remove") this.weekConfiguration[key].seat = " " as TSeatOption;
+    else this.weekConfiguration[key].seat = value.seat;
+
+    if (value.cell) this.weekConfiguration[key].cell = value.cell;
   }
 
   getCronConfiguration() {

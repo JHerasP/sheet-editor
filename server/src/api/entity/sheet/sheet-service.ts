@@ -1,7 +1,8 @@
 import { GaxiosError, GaxiosResponse } from "gaxios";
 import { sheets_v4 } from "googleapis";
-import { awaitResolver } from "../../../../TS_tools/general-utility";
+import { awaitResolver, normalice } from "../../../../TS_tools/general-utility";
 import { ENV } from "../../../config";
+import { nextLetter } from "../../utils/tools";
 import {
   authSheets,
   getColumnValues,
@@ -24,7 +25,7 @@ export const getSheetValues = async (weekConfig: TWeekConfiguration): Promise<TW
 
     await sheets.spreadsheets.values
       .get({
-        spreadsheetId: sheetId!,
+        spreadsheetId: sheetId,
         range: `${ENV.sheetConfig.name}!${options.cell}`,
       })
       .then((res) => {
@@ -79,4 +80,58 @@ export const getSheetColumnValues = async (range: string): Promise<TSeatOption[]
   if (res.data && res.data.values) return res.data.values.flat() as TSeatOption[];
 
   return ["Remove"] as TSeatOption[];
+};
+
+const employeesColumnLetter = "K";
+export const getNamesColumn = async (userName: string) => {
+  const [sheets] = await awaitResolver(authSheets());
+  const sheetId = ENV.sheetConfig.id;
+  if (!sheets) throw new Error(`No sheet`);
+
+  const names = await getSheetColumnValues(`${employeesColumnLetter}1:${employeesColumnLetter}100`)
+    .then((x) => x)
+    .catch(() => {
+      throw new Error(`Error when getting the cell values`);
+    });
+
+  const existName = names?.some((name) => normalice(name) === normalice(userName));
+
+  if (!existName) throw new Error(`Name ${userName} not found`);
+
+  let rowNumber = "";
+  let emptyCells = 0;
+
+  for (let i = 0; i < 100; i++) {
+    if (emptyCells > 10) break;
+    await sheets.spreadsheets.values
+      .get({
+        spreadsheetId: sheetId,
+        range: `${ENV.sheetConfig.name}!${employeesColumnLetter}${i}`,
+      })
+      .then((res) => {
+        if (res.data.values) {
+          const val = res.data.values[0][0];
+          if (normalice(val) === normalice(userName)) rowNumber = `${i}`;
+        } else emptyCells++;
+      })
+      .catch((err) => {
+        throw new Error(err);
+      });
+  }
+
+  const mondayLetter = nextLetter(employeesColumnLetter);
+  const tuesdayLetter = nextLetter(mondayLetter);
+  const wedNesdayLetter = nextLetter(tuesdayLetter);
+  const thursdayLetter = nextLetter(wedNesdayLetter);
+  const fridayLetter = nextLetter(thursdayLetter);
+
+  const weekConfig: Record<TWeekDay, string> = {
+    Monday: `${mondayLetter}${rowNumber}`,
+    Tuesday: `${tuesdayLetter}${rowNumber}`,
+    Wednesday: `${wedNesdayLetter}${rowNumber}`,
+    Thursday: `${thursdayLetter}${rowNumber}`,
+    Friday: `${fridayLetter}${rowNumber}`,
+  };
+
+  return weekConfig;
 };

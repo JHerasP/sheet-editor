@@ -38,7 +38,8 @@ export const WEEKDAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
 export type TSeatOption = typeof SEAT_OPTIONS[number];
 export type TWeekDay = typeof WEEKDAYS[number];
 
-export type TWeekConfiguration = Record<TWeekDay, { seat: TSeatOption | " "; cell: string }>;
+export type TWeekConfigValues = { seat: TSeatOption; cell: string };
+export type TWeekConfiguration = Record<TWeekDay, TWeekConfigValues>;
 export type TWeekValues = Record<TWeekDay, TSeatOption>;
 
 export const weekValuesInit: TWeekValues = {
@@ -50,9 +51,9 @@ export const weekValuesInit: TWeekValues = {
 };
 
 export const weekConfigurationInit: Record<TWeekDay, { seat: TSeatOption; cell: string }> = {
-  Monday: { seat: weekValuesInit.Monday, cell: "L13" },
-  Tuesday: { seat: weekValuesInit.Tuesday, cell: "M13" },
-  Wednesday: { seat: weekValuesInit.Wednesday, cell: "N13" },
-  Thursday: { seat: weekValuesInit.Thursday, cell: "O13" },
-  Friday: { seat: weekValuesInit.Friday, cell: "P13" },
+  Monday: { seat: weekValuesInit.Monday, cell: "" },
+  Tuesday: { seat: weekValuesInit.Tuesday, cell: "" },
+  Wednesday: { seat: weekValuesInit.Wednesday, cell: "" },
+  Thursday: { seat: weekValuesInit.Thursday, cell: "" },
+  Friday: { seat: weekValuesInit.Friday, cell: "" },
 };

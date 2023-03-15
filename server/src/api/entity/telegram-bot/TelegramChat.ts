@@ -5,7 +5,7 @@ import { SheetController } from "../sheet/SheetController";
 import { getKeyboard, TMenus } from "./keyboards";
 import NEW_TELEGRAM_KEYBOARD from "./keyboards/index";
 import { queryHandler } from "./telegramHandler";
-import { TSeatOption, TWeekDay } from "../sheet/weekConfiguration";
+import { TSeatOption, TWeekConfigValues, TWeekDay } from "../sheet/weekConfiguration";
 import { sheetCron } from "../sheet";
 const TKA = NEW_TELEGRAM_KEYBOARD;
 
@@ -33,7 +33,12 @@ export class TelegramChat {
   }
 
   saveWeekConfig() {
-    if (this.selectedDay && this.selectedSeat) this.sheetController.setWeekConfig(this.selectedDay, this.selectedSeat);
+    if (this.selectedDay && this.selectedSeat)
+      this.sheetController.setWeekConfig(this.selectedDay, { seat: this.selectedSeat, cell: "" });
+  }
+
+  saveWeekCellsConfig(day: TWeekDay, values: TWeekConfigValues) {
+    this.sheetController.setWeekConfig(day, values);
   }
 
   enableCron() {
@@ -81,7 +86,13 @@ export class TelegramChat {
 
       if (err) this.telegramBot.answerCallbackQuery(callbackId || "", { text: err.message, show_alert: true });
       else {
-        if (command === "Get values" || command === "Fill sheet" || command === "Turn on" || command === "Turn off")
+        if (
+          command === "Get values" ||
+          command === "Fill sheet" ||
+          command === "Turn on" ||
+          command === "Turn off" ||
+          command === "Name"
+        )
           this.telegramBot.answerCallbackQuery(callbackId || "", { text: "Operation done (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧" });
       }
 
