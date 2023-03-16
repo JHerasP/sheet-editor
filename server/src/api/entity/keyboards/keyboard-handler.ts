@@ -1,6 +1,6 @@
-import { caseGuard } from "../../../../../TS_tools/general-utility";
-import { cronConfiguration, SheetController } from "../../sheet/SheetController";
-import { TWeekDay } from "../../sheet/weekConfiguration";
+import { caseGuard } from "../../../../TS_tools/general-utility";
+import { cronConfiguration, SheetController } from "../sheet/SheetController";
+import { TWeekDay } from "../sheet/weekConfiguration";
 import NEW_TELEGRAM_KEYBOARD, { TMenus } from "./index";
 
 export const getKeyboard = (

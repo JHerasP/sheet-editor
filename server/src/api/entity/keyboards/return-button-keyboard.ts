@@ -1,4 +1,4 @@
-import { ICustomInLineKeyboadButton } from "../../../utils/types";
+import { ICustomInLineKeyboadButton } from "../../utils/types";
 
 export type TReturnMenu = "Return";
 export type TReturnMenuText = "⬅ Return";

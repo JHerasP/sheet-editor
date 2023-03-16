@@ -1,5 +1,5 @@
-import { ICustomInLineKeyboadButton } from "../../../utils/types";
-import { SEAT_OPTIONS, TSeatOption } from "../../sheet/weekConfiguration";
+import { ICustomInLineKeyboadButton } from "../../utils/types";
+import { SEAT_OPTIONS, TSeatOption } from "../sheet/weekConfiguration";
 import { TReturnMenu, TReturnMenuText } from "./return-button-keyboard";
 
 export type TSeatsMenu = TSeatOption | TReturnMenu | "Edit configuration";

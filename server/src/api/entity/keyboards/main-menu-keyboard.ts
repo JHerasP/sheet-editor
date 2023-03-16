@@ -1,4 +1,4 @@
-import { ICustomInLineKeyboadButton } from "../../../utils/types";
+import { ICustomInLineKeyboadButton } from "../../utils/types";
 
 export type TMainMenu = "Sheet" | "Cron" | "Employee";
 export type TMainMenuText = "📖 Sheet" | "⌚ Cron" | "🎭 Employee";

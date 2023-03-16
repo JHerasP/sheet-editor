@@ -1,5 +1,5 @@
-import { ICustomInLineKeyboadButton } from "../../../utils/types";
-import { TWeekDay, WEEKDAYS } from "../../sheet/weekConfiguration";
+import { ICustomInLineKeyboadButton } from "../../utils/types";
+import { TWeekDay, WEEKDAYS } from "../sheet/weekConfiguration";
 import { TMainMenu } from "./main-menu-keyboard";
 import { TReturnMenuText } from "./return-button-keyboard";
 

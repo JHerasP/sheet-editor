@@ -1,4 +1,4 @@
-import { ICustomInLineKeyboadButton } from "../../../utils/types";
+import { ICustomInLineKeyboadButton } from "../../utils/types";
 import { returnButton, TReturnMenu, TReturnMenuText } from "./return-button-keyboard";
 
 export type TSheetMenu = "Get values" | "Edit configuration" | "Fill sheet" | TReturnMenu;

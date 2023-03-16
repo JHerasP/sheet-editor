@@ -1,4 +1,4 @@
-import { ICustomInLineKeyboadButton } from "../../../utils/types";
+import { ICustomInLineKeyboadButton } from "../../utils/types";
 import { TMainMenu } from "./main-menu-keyboard";
 import { TReturnMenuText } from "./return-button-keyboard";
 

@@ -1,5 +1,5 @@
-import { ENV } from "../../../../config";
-import { ICustomInLineKeyboadButton } from "../../../utils/types";
+import { ENV } from "../../../config";
+import { ICustomInLineKeyboadButton } from "../../utils/types";
 import { returnButton } from "./return-button-keyboard";
 const nameList = ["Jesus Heras", "Angela Perez"];
 

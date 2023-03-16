@@ -2,7 +2,7 @@ import { caseGuard } from "../../../../TS_tools/general-utility";
 import { ENV } from "../../../config";
 import { getNamesColumn } from "../sheet/sheet-service";
 import { TSeatOption, TWeekDay } from "../sheet/weekConfiguration";
-import { TMenus } from "./keyboards";
+import { TMenus } from "../keyboards";
 import { TelegramSheetEditor } from "./TelegramSheetEditor";
 
 export const queryHandler = async (telegram: TelegramSheetEditor, command: TMenus) => {

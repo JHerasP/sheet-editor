@@ -1,6 +1,6 @@
 import cron from "node-cron";
 import { ENV } from "../../../config";
-import { TelegramSheetEditor } from "../telegram-bot/TelegramChat";
+import { TelegramSheetEditor } from "../telegram-sheet-editor/TelegramSheetEditor";
 import { postSheetValues } from "./sheet-service";
 import { SheetController } from "./SheetController";
 const { cronExpresion } = ENV;

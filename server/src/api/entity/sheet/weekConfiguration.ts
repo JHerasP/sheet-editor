@@ -43,11 +43,11 @@ export type TWeekConfiguration = Record<TWeekDay, TWeekConfigValues>;
 export type TWeekValues = Record<TWeekDay, TSeatOption>;
 
 export const weekValuesInit: TWeekValues = {
-  Monday: "Teletrabajo",
-  Tuesday: "Presencial",
-  Wednesday: "Teletrabajo",
-  Thursday: "Teletrabajo",
-  Friday: "Presencial",
+  Monday: "No sabe",
+  Tuesday: "No sabe",
+  Wednesday: "No sabe",
+  Thursday: "No sabe",
+  Friday: "No sabe",
 };
 
 export const weekConfigurationInit: Record<TWeekDay, { seat: TSeatOption; cell: string }> = {
