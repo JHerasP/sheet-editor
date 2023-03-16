@@ -3,9 +3,9 @@ import { ENV } from "../../../config";
 import { getNamesColumn } from "../sheet/sheet-service";
 import { TSeatOption, TWeekDay } from "../sheet/weekConfiguration";
 import { TMenus } from "./keyboards";
-import { TelegramChat } from "./TelegramChat";
+import { TelegramSheetEditor } from "./TelegramSheetEditor";
 
-export const queryHandler = async (telegram: TelegramChat, command: TMenus) => {
+export const queryHandler = async (telegram: TelegramSheetEditor, command: TMenus) => {
   if (command.includes(ENV.telegram.secretCode)) return setEmployeeCells(telegram, command);
   switch (command) {
     case "Sheet":
@@ -63,38 +63,38 @@ export const queryHandler = async (telegram: TelegramChat, command: TMenus) => {
   }
 };
 
-const setDay = (telegram: TelegramChat, command: TWeekDay) => {
+const setDay = (telegram: TelegramSheetEditor, command: TWeekDay) => {
   telegram.setSelectedDay(command);
 };
-const setSeat = (telegram: TelegramChat, command: TSeatOption) => {
+const setSeat = (telegram: TelegramSheetEditor, command: TSeatOption) => {
   telegram.setSelectedSeat(command);
   telegram.saveWeekConfig();
 };
 
-const turnOn = (telegram: TelegramChat) => {
+const turnOn = (telegram: TelegramSheetEditor) => {
   telegram.enableCron();
 };
 
-const turnOff = (telegram: TelegramChat) => {
+const turnOff = (telegram: TelegramSheetEditor) => {
   telegram.removeCron();
 };
-const cronStatus = (telegram: TelegramChat) => {
+const cronStatus = (telegram: TelegramSheetEditor) => {
   telegram.getStatusCron();
 };
 
-const readSheetValues = (telegram: TelegramChat) => {
+const readSheetValues = (telegram: TelegramSheetEditor) => {
   return telegram.readSheetValues();
 };
 
-const fillSheet = (telegram: TelegramChat) => {
+const fillSheet = (telegram: TelegramSheetEditor) => {
   return telegram.writeSheet();
 };
 
-const getError = (telegram: TelegramChat) => {
+const getError = (telegram: TelegramSheetEditor) => {
   throw new Error(telegram.getStatusCron().lastError);
 };
 
-const findName = async (telegram: TelegramChat, userName: string) => {
+const findName = async (telegram: TelegramSheetEditor, userName: string) => {
   const columnCells = await getNamesColumn(userName);
 
   Object.entries(columnCells).forEach((value) => {
@@ -104,6 +104,6 @@ const findName = async (telegram: TelegramChat, userName: string) => {
   });
 };
 
-const setEmployeeCells = (telegram: TelegramChat, name: string) => {
+const setEmployeeCells = (telegram: TelegramSheetEditor, name: string) => {
   return findName(telegram, name.replace(ENV.telegram.secretCode, ""));
 };

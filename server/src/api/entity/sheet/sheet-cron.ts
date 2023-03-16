@@ -1,11 +1,11 @@
 import cron from "node-cron";
 import { ENV } from "../../../config";
-import { TelegramChat } from "../telegram-bot/TelegramChat";
+import { TelegramSheetEditor } from "../telegram-bot/TelegramChat";
 import { postSheetValues } from "./sheet-service";
 import { SheetController } from "./SheetController";
 const { cronExpresion } = ENV;
 
-export const startService = (sheetController: SheetController, telegramChat: TelegramChat, cronName: string) => {
+export const startService = (sheetController: SheetController, telegramChat: TelegramSheetEditor, cronName: string) => {
   const job = cron.schedule(
     cronExpresion,
     () => {

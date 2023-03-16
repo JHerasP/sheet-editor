@@ -4,13 +4,13 @@ import { awaitResolver } from "../../../../TS_tools/general-utility";
 import { SheetController } from "../sheet/SheetController";
 import { getKeyboard, TMenus } from "./keyboards";
 import NEW_TELEGRAM_KEYBOARD from "./keyboards/index";
-import { queryHandler } from "./telegramHandler";
+import { queryHandler } from "./telegramEditorHandler";
 import { TSeatOption, TWeekConfigValues, TWeekDay } from "../sheet/weekConfiguration";
 import { sheetCron } from "../sheet";
 import { ENV } from "../../../config";
 const TKA = NEW_TELEGRAM_KEYBOARD;
 
-export class TelegramChat {
+export class TelegramSheetEditor {
   private telegramBot: TelegramBot;
   private sheetController: SheetController;
   private selectedDay?: TWeekDay;
