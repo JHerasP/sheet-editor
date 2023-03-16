@@ -13,10 +13,10 @@ const ENV = {
     name: envInfo.SHEET_NAME!,
     readCells: envInfo.SHEET_RANGE_READ!,
     writeCells: envInfo.SHEET_RANGE_WRITE!,
-    employeeName: envInfo.EMPLOYEE_NAME!,
   },
   telegram: {
     token: envInfo.TELEGRAM_TOKEN!,
+    secretCode: envInfo.SECRET_CODE!,
   },
 } as const;
 

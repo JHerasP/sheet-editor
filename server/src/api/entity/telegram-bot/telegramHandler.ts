@@ -1,10 +1,12 @@
 import { caseGuard } from "../../../../TS_tools/general-utility";
+import { ENV } from "../../../config";
 import { getNamesColumn } from "../sheet/sheet-service";
 import { TSeatOption, TWeekDay } from "../sheet/weekConfiguration";
 import { TMenus } from "./keyboards";
 import { TelegramChat } from "./TelegramChat";
 
 export const queryHandler = async (telegram: TelegramChat, command: TMenus) => {
+  if (command.includes(ENV.telegram.secretCode)) return setEmployeeCells(telegram, command);
   switch (command) {
     case "Sheet":
       return;
@@ -54,12 +56,10 @@ export const queryHandler = async (telegram: TelegramChat, command: TMenus) => {
       return getError(telegram);
     case "Employee":
       return;
-
     case "Return":
       return;
     default:
       caseGuard(command);
-      return findNameSecretCode(telegram, command as any);
   }
 };
 
@@ -104,6 +104,6 @@ const findName = async (telegram: TelegramChat, userName: string) => {
   });
 };
 
-const findNameSecretCode = (telegram: TelegramChat, name: string) => {
-  if (name.includes("$*$")) return findName(telegram, name.replace("$*$", ""));
+const setEmployeeCells = (telegram: TelegramChat, name: string) => {
+  return findName(telegram, name.replace(ENV.telegram.secretCode, ""));
 };

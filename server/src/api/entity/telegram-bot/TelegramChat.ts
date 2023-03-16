@@ -7,6 +7,7 @@ import NEW_TELEGRAM_KEYBOARD from "./keyboards/index";
 import { queryHandler } from "./telegramHandler";
 import { TSeatOption, TWeekConfigValues, TWeekDay } from "../sheet/weekConfiguration";
 import { sheetCron } from "../sheet";
+import { ENV } from "../../../config";
 const TKA = NEW_TELEGRAM_KEYBOARD;
 
 export class TelegramChat {
@@ -112,7 +113,7 @@ const showOperationDone = (command: TMenus) => {
     command === "Fill sheet" ||
     command === "Turn on" ||
     command === "Turn off" ||
-    command.includes("$*$")
+    command.includes(ENV.telegram.secretCode)
   )
     return true;
   else return false;

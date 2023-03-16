@@ -4,7 +4,7 @@ import cron from "node-cron";
 export function validateENV(env: typeof ENV) {
   checkValidCron(env.cronExpresion);
   checkValidSheetInfo(env.sheetConfig);
-  checkValidTelegramToteken(env.telegram);
+  checkValidTelegramInfo(env.telegram);
 }
 
 function checkValidCron(cronTimer?: string) {
@@ -18,8 +18,8 @@ function checkValidSheetInfo(sheetConfig: typeof ENV["sheetConfig"]) {
   });
 }
 
-function checkValidTelegramToteken(sheetConfig: typeof ENV["telegram"]) {
-  Object.values(sheetConfig).forEach((config) => {
-    if (!config) throw new Error(`${config} is missing`);
+function checkValidTelegramInfo(sheetConfig: typeof ENV["telegram"]) {
+  Object.entries(sheetConfig).forEach(([key, config]) => {
+    if (!config) throw new Error(`${key} is missing`);
   });
 }
