@@ -40,8 +40,6 @@ export const getSheetValues = async (weekConfig: TWeekConfiguration): Promise<TW
       });
   }
 
-  console.info("✅", weekValues);
-
   return weekValues as TWeekValues;
 };
 

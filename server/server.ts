@@ -3,6 +3,7 @@ import { TelegramChat } from "./src/api/entity/telegramChat/TelegramChat";
 import { ENV } from "./src/config";
 const { telegram } = ENV;
 const { token } = telegram;
+const nameList = ["Jesus Heras", "Angela Perez"];
 
 const telegramBot = new TelegramBot(token, { polling: true });
-new TelegramChat(telegramBot);
+new TelegramChat(telegramBot, nameList);

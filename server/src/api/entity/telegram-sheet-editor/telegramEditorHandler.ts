@@ -1,12 +1,9 @@
 import { caseGuard } from "../../../../TS_tools/general-utility";
-import { ENV } from "../../../config";
-import { getNamesColumn } from "../sheet/sheet-service";
-import { TSeatOption, TWeekDay } from "../sheet/weekConfiguration";
 import { TMenus } from "../keyboards";
+import { TSeatOption, TWeekDay } from "../sheet/weekConfiguration";
 import { TelegramSheetEditor } from "./TelegramSheetEditor";
 
 export const queryHandler = async (telegram: TelegramSheetEditor, command: TMenus) => {
-  if (command.includes(ENV.telegram.secretCode)) return setEmployeeCells(telegram, command);
   switch (command) {
     case "Sheet":
       return;
@@ -92,18 +89,4 @@ const fillSheet = (telegram: TelegramSheetEditor) => {
 
 const getError = (telegram: TelegramSheetEditor) => {
   throw new Error(telegram.getStatusCron().lastError);
-};
-
-const findName = async (telegram: TelegramSheetEditor, userName: string) => {
-  const columnCells = await getNamesColumn(userName);
-
-  Object.entries(columnCells).forEach((value) => {
-    const [day, cell] = value as [TWeekDay, string];
-
-    telegram.saveWeekCellsConfig(day, { cell: cell, seat: "Remove" });
-  });
-};
-
-const setEmployeeCells = (telegram: TelegramSheetEditor, name: string) => {
-  return findName(telegram, name.replace(ENV.telegram.secretCode, ""));
 };

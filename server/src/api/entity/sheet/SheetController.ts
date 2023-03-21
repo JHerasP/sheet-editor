@@ -1,20 +1,20 @@
 import { getSheetValues, postSheetValues } from "./sheet-service";
 import {
+  createWeekConfiguration,
   TSeatOption,
   TWeekConfiguration,
   TWeekConfigValues,
   TWeekDay,
   TWeekValues,
-  weekConfigurationInit,
   weekValuesInit,
 } from "./weekConfiguration";
 
 export type cronConfiguration = { isRunning: boolean; hasError: boolean; lastError: string };
 
 export class SheetController {
-  private weekConfiguration: TWeekConfiguration = weekConfigurationInit;
+  private weekConfiguration: TWeekConfiguration = createWeekConfiguration();
   private cronConfiguration: cronConfiguration = { isRunning: false, hasError: false, lastError: "" };
-  private sheetValues: TWeekValues = weekValuesInit;
+  private sheetValues: TWeekValues = { ...weekValuesInit };
 
   getWeekConfig() {
     return this.weekConfiguration;

@@ -50,10 +50,10 @@ export const weekValuesInit: TWeekValues = {
   Friday: "No sabe",
 };
 
-export const weekConfigurationInit: Record<TWeekDay, { seat: TSeatOption; cell: string }> = {
+export const createWeekConfiguration = () => ({
   Monday: { seat: weekValuesInit.Monday, cell: "" },
   Tuesday: { seat: weekValuesInit.Tuesday, cell: "" },
   Wednesday: { seat: weekValuesInit.Wednesday, cell: "" },
   Thursday: { seat: weekValuesInit.Thursday, cell: "" },
   Friday: { seat: weekValuesInit.Friday, cell: "" },
-};
+});
