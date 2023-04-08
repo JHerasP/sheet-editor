@@ -1,6 +1,6 @@
 import { ICustomInLineKeyboadButton } from "../../utils/types";
 import { SEAT_OPTIONS, TSeatOption } from "../sheet/weekConfiguration";
-import { TReturnMenu, TReturnMenuText } from "./return-button-keyboard";
+import { returnButton, TReturnMenu, TReturnMenuText } from "./return-button-keyboard";
 
 export type TSeatsMenu = TSeatOption | TReturnMenu | "Edit configuration";
 export type TSeatMenuText = TSeatOption | TReturnMenuText;
@@ -23,5 +23,5 @@ export const seatsMenu: TDaysSeatValues[][] = [
   fourthRow,
   fifthRow,
   sixthRow,
-  [{ text: "⬅ Return", callback_data: "Edit configuration" }],
+  [{ text: returnButton.text, callback_data: "Edit configuration" }],
 ];

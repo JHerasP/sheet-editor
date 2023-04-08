@@ -6,7 +6,7 @@ import { getKeyboard } from "../keyboards/keyboard-handler";
 import { sheetCron } from "../sheet";
 import { SheetController } from "../sheet/SheetController";
 import { TSeatOption, TWeekDay } from "../sheet/weekConfiguration";
-import { setEmployeeCells, showOperationDone } from "./telegra-sheet-editor-helper";
+import { setEmployeeCells, showOperationDone } from "./telegram-sheet-editor-helper";
 import { queryHandler } from "./telegramEditorHandler";
 
 export class TelegramSheetEditor {
@@ -97,7 +97,7 @@ export class TelegramSheetEditor {
       const command = callbackQuery.data as TMenus;
       const callbackId = callbackQuery.id;
 
-      const [, err] = await awaitResolver<any, Error>(queryHandler(this, command));
+      const [, err] = await awaitResolver<unknown, Error>(queryHandler(this, command));
 
       if (err) return this.telegramBot.answerCallbackQuery(callbackId || "", { text: err.message, show_alert: true });
       else {

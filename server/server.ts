@@ -7,3 +7,4 @@ const nameList = employeeNames;
 
 const telegramBot = new TelegramBot(token, { polling: true });
 new TelegramChat(telegramBot, nameList);
+console.info("✅", "Sheet editor rdy to sheet  ┻━┻ ︵ヽ(`Д´)ﾉ︵ ┻━┻ ");

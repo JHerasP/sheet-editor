@@ -19,6 +19,4 @@ export const startService = (sheetController: SheetController, telegramChat: Tel
   );
 
   job.stop();
-
-  console.info("✅", "Sheet editor rdy to sheet  ┻━┻ ︵ヽ(`Д´)ﾉ︵ ┻━┻ ");
 };
