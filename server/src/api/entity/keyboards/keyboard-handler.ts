@@ -9,9 +9,13 @@ export const getKeyboard = (
   cronStatus: cronConfiguration,
   selectedDay?: TWeekDay
 ) => {
-  const seats = getSeats(sheetController);
+  const seats = Object.entries(sheetController.getWeekConfig())
+    .map(([key, value]) => `- ${key} : ${value.seat} \n`)
+    .join("");
 
-  const sheetValues = getSheetValues(sheetController);
+  const sheetValues = Object.entries(sheetController.getSheetWeekValues())
+    .map(([key, value]) => `- ${key} : ${value} \n`)
+    .join("");
 
   switch (command) {
     case "Sheet":
@@ -75,6 +79,7 @@ export const getKeyboard = (
         message: `🎭 Who are you? :`,
         keyboard: NEW_TELEGRAM_KEYBOARD.employeeNamesMenu,
       };
+
     case "Return":
       return { message: "Tell me what you want to do ヾ(•ω•`)o", keyboard: NEW_TELEGRAM_KEYBOARD.mainMenu };
     default:
@@ -82,15 +87,3 @@ export const getKeyboard = (
       return undefined;
   }
 };
-
-function getSheetValues(sheetController: SheetController) {
-  return Object.entries(sheetController.getSheetWeekValues())
-    .map(([key, value]) => `- ${key} : ${value} \n`)
-    .join("");
-}
-
-function getSeats(sheetController: SheetController) {
-  return Object.entries(sheetController.getWeekConfig())
-    .map(([key, value]) => `- ${key} : ${value.seat} \n`)
-    .join("");
-}

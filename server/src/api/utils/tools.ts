@@ -14,6 +14,10 @@ export function nextLetter(s: string) {
   });
 }
 
+export function hasSecretCode(command: string) {
+  return command.includes(ENV.telegram.secretCode);
+}
+
 export function removeSecretCode(command: string) {
   return `${command.replace(ENV.telegram.secretCode, "")}`;
 }
