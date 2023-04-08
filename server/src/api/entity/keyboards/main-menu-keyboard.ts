@@ -8,5 +8,4 @@ export type TMainMenuValues = ICustomInLineKeyboadButton<TMainMenuText, TMainMen
 export const mainMenu: TMainMenuValues[][] = [
   [{ text: "📖 Sheet", callback_data: "Sheet" }],
   [{ text: "⌚ Cron", callback_data: "Cron" }],
-  [{ text: "🎭 Employee", callback_data: "Employee" }],
 ];

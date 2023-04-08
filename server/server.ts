@@ -1,9 +1,9 @@
 import TelegramBot from "node-telegram-bot-api";
 import { TelegramChat } from "./src/api/entity/telegramChat/TelegramChat";
 import { ENV } from "./src/config";
-const { telegram } = ENV;
+const { telegram, employeeNames } = ENV;
 const { token } = telegram;
-const nameList = ["Jesus Heras", "Angela Perez"];
+const nameList = employeeNames;
 
 const telegramBot = new TelegramBot(token, { polling: true });
 new TelegramChat(telegramBot, nameList);

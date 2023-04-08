@@ -5,6 +5,7 @@ export function validateENV(env: typeof ENV) {
   checkValidCron(env.cronExpresion);
   checkValidSheetInfo(env.sheetConfig);
   checkValidTelegramInfo(env.telegram);
+  checkValidEmployeeInfo(env.employeeNames);
 }
 
 function checkValidCron(cronTimer?: string) {
@@ -22,4 +23,8 @@ function checkValidTelegramInfo(sheetConfig: typeof ENV["telegram"]) {
   Object.entries(sheetConfig).forEach(([key, config]) => {
     if (!config) throw new Error(`${key} is missing`);
   });
+}
+
+function checkValidEmployeeInfo(sheetConfig: typeof ENV["employeeNames"]) {
+  if (!sheetConfig) throw Error("Missing employee names");
 }

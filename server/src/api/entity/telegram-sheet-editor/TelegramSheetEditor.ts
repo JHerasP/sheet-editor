@@ -2,7 +2,8 @@ import cron from "node-cron";
 import TelegramBot from "node-telegram-bot-api";
 import { awaitResolver } from "../../../../TS_tools/general-utility";
 import { ENV } from "../../../config";
-import { getKeyboard, TMenus } from "../keyboards";
+import { TMenus } from "../keyboards";
+import { getKeyboard } from "../keyboards/keyboard-handler";
 import { getNamesColumn } from "../sheet/sheet-service";
 import { SheetController } from "../sheet/SheetController";
 import { TSeatOption, TWeekDay } from "../sheet/weekConfiguration";
@@ -30,8 +31,12 @@ export class TelegramSheetEditor {
     this.sheetController = sheetController;
     this.cronName = cronName;
     this.textSubscribers();
-    setEmployeeCells(this, userKey);
+
     // sheetCron.startService(sheetController, this, cronName);
+  }
+
+  locateCells() {
+    return setEmployeeCells(this, this.userKey);
   }
 
   setSelectedDay(day: TWeekDay) {

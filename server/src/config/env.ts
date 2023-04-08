@@ -18,6 +18,7 @@ const ENV = {
     token: envInfo.TELEGRAM_TOKEN!,
     secretCode: envInfo.SECRET_CODE!,
   },
+  employeeNames: envInfo.EMPLOYEE_NAMES?.split(",")!,
 } as const;
 
 validateENV(ENV);
