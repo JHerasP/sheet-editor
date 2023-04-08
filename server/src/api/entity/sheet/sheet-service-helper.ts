@@ -31,17 +31,16 @@ export const compareWithNewValue = (
 };
 
 export function removeNonPhisicalSeats(columns: TSeatOption[][], i: number) {
-  return columns[i].filter((seat: TSeatOption) => {
-    if (
-      seat === "Teletrabajo" ||
-      seat === "No sabe" ||
-      seat === "Vacaciones" ||
-      seat === "Presencial" ||
-      seat === "Remove"
-    )
-      return false;
-    return true;
-  });
+  return columns[i].filter(
+    (seat: TSeatOption) =>
+      !(
+        seat === "Teletrabajo" ||
+        seat === "No sabe" ||
+        seat === "Vacaciones" ||
+        seat === "Presencial" ||
+        seat === "Remove"
+      )
+  );
 }
 
 export function getSingleCellValue(sheets: sheets_v4.Sheets, sheetId: string, cell: string) {

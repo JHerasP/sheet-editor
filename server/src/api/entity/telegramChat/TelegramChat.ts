@@ -72,7 +72,7 @@ export class TelegramChat {
         }
 
         this.telegramBot
-          .editMessageText("Tell me what you want toooooo do ヾ(•ω•`)o", {
+          .editMessageText("Tell me what you want to do ヾ(•ω•`)o", {
             chat_id: callbackQuery.from.id,
             message_id: callbackQuery.message?.message_id,
             reply_markup: {

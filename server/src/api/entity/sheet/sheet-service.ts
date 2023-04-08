@@ -121,14 +121,14 @@ export const getNamesColumn = async (userName: string) => {
 
   const mondayLetter = nextLetter(employeesColumnLetter);
   const tuesdayLetter = nextLetter(mondayLetter);
-  const wedNesdayLetter = nextLetter(tuesdayLetter);
-  const thursdayLetter = nextLetter(wedNesdayLetter);
+  const wednesdayLetter = nextLetter(tuesdayLetter);
+  const thursdayLetter = nextLetter(wednesdayLetter);
   const fridayLetter = nextLetter(thursdayLetter);
 
   const weekConfig: Record<TWeekDay, string> = {
     Monday: `${mondayLetter}${rowNumber}`,
     Tuesday: `${tuesdayLetter}${rowNumber}`,
-    Wednesday: `${wedNesdayLetter}${rowNumber}`,
+    Wednesday: `${wednesdayLetter}${rowNumber}`,
     Thursday: `${thursdayLetter}${rowNumber}`,
     Friday: `${fridayLetter}${rowNumber}`,
   };
