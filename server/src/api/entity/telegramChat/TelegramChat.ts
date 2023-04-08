@@ -1,6 +1,7 @@
 import TelegramBot from "node-telegram-bot-api";
 import { ENV } from "../../../config";
 import { telegramTools } from "../../utils";
+import { removeSecretCode } from "../../utils/tools";
 import NEW_TELEGRAM_KEYBOARD from "../keyboards/index";
 import { SheetController } from "../sheet/SheetController";
 import { TelegramSheetEditor } from "../telegram-sheet-editor/TelegramSheetEditor";
@@ -37,12 +38,13 @@ export class TelegramChat {
 
       if (command && command.includes(ENV.telegram.secretCode)) {
         if (newUser) {
-          console.info("🆗", "New user", userId);
+          console.info("🆗", "New user", command, userId);
 
           this.loggedUsers.add(userId);
+
           const sheetEditor = new TelegramSheetEditor(
             userId,
-            command.replace(ENV.telegram.secretCode, ""),
+            removeSecretCode(command),
             this.telegramBot,
             this.sheetConfigurations,
             userId.toString()
@@ -51,22 +53,19 @@ export class TelegramChat {
           telegramTools.editMessage(
             this.telegramBot,
             userId,
-            `Hello ${command.replace(
-              ENV.telegram.secretCode,
-              ""
-            )} o(*^▽^*)┛ \n\n I am looking for your cells, plase wait... \n`,
+            `Hello ${removeSecretCode(command)} o(*^▽^*)┛ \n\n I am looking for your cells, please wait... \n`,
             [],
             messageId
           );
 
           await sheetEditor
             .locateCells()
-            .then(() =>
-              this.telegramBot.answerCallbackQuery(callbackId || "", { text: "Operation done (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧" })
-            );
+            .then(() => this.telegramBot.answerCallbackQuery(callbackId, { text: "Operation done (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧" }))
+            .catch(() => this.telegramBot.answerCallbackQuery(callbackId, { text: "Something went wrong (* ￣︿￣)" }));
         }
+
         this.telegramBot
-          .editMessageText("TKA.mainMenu" || "", {
+          .editMessageText("Tell me what you want to do ヾ(•ω•`)o", {
             chat_id: callbackQuery.from.id,
             message_id: callbackQuery.message?.message_id,
             reply_markup: {
@@ -78,10 +77,11 @@ export class TelegramChat {
     });
   }
 }
+
 const createConfigurationsFromEmployees = (nameList: string[]) => {
-  const target: Record<string, SheetController> = {};
-  nameList.forEach((name) => {
-    target[name] = new SheetController();
-  });
-  return target;
+  const employeeConfigs: Record<string, SheetController> = {};
+
+  nameList.forEach((name) => (employeeConfigs[name] = new SheetController()));
+
+  return employeeConfigs;
 };

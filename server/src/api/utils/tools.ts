@@ -1,6 +1,8 @@
+import { ENV } from "../../config";
+
 export function nextLetter(s: string) {
-  return s.replace(/([a-zA-Z])[^a-zA-Z]*$/, function (a) {
-    var c = a.charCodeAt(0);
+  return s.replace(/([a-zA-Z])[^a-zA-Z]*$/, (a) => {
+    let c = a.charCodeAt(0);
     switch (c) {
       case 90:
         return "A";
@@ -10,4 +12,8 @@ export function nextLetter(s: string) {
         return String.fromCharCode(++c);
     }
   });
+}
+
+export function removeSecretCode(command: string) {
+  return `${command.replace(ENV.telegram.secretCode, "")}`;
 }

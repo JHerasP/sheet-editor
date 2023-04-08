@@ -1,12 +1,12 @@
 import cron from "node-cron";
 import TelegramBot from "node-telegram-bot-api";
 import { awaitResolver } from "../../../../TS_tools/general-utility";
-import { ENV } from "../../../config";
 import { TMenus } from "../keyboards";
 import { getKeyboard } from "../keyboards/keyboard-handler";
-import { getNamesColumn } from "../sheet/sheet-service";
+import { sheetCron } from "../sheet";
 import { SheetController } from "../sheet/SheetController";
 import { TSeatOption, TWeekDay } from "../sheet/weekConfiguration";
+import { setEmployeeCells, showOperationDone } from "./telegra-sheet-editor-helper";
 import { queryHandler } from "./telegramEditorHandler";
 
 export class TelegramSheetEditor {
@@ -32,7 +32,7 @@ export class TelegramSheetEditor {
     this.cronName = cronName;
     this.textSubscribers();
 
-    // sheetCron.startService(sheetController, this, cronName);
+    sheetCron.startService(this.sheetController[this.userKey], this, cronName);
   }
 
   locateCells() {
@@ -48,7 +48,6 @@ export class TelegramSheetEditor {
   }
 
   saveWeekConfig() {
-    console.info("❌", this.userKey);
     const actualConfig = this.sheetController[this.userKey].getWeekConfig();
     if (this.selectedDay && this.selectedSeat)
       this.sheetController[this.userKey].setWeekConfig(this.selectedDay, {
@@ -110,7 +109,7 @@ export class TelegramSheetEditor {
       if (!keyBoard) return;
 
       this.telegramBot
-        .editMessageText(keyBoard?.message + this.userKey || "", {
+        .editMessageText(keyBoard?.message, {
           chat_id: callbackQuery.from.id,
           message_id: callbackQuery.message?.message_id,
           reply_markup: {
@@ -121,29 +120,3 @@ export class TelegramSheetEditor {
     });
   }
 }
-
-const showOperationDone = (command: TMenus) => {
-  if (
-    command === "Get values" ||
-    command === "Fill sheet" ||
-    command === "Turn on" ||
-    command === "Turn off" ||
-    command.includes(ENV.telegram.secretCode)
-  )
-    return true;
-  else return false;
-};
-
-const findName = async (telegram: TelegramSheetEditor, userName: string) => {
-  const columnCells = await getNamesColumn(userName);
-
-  Object.entries(columnCells).forEach((value) => {
-    const [day, cell] = value as [TWeekDay, string];
-    console.info("✅", day, cell);
-    telegram.saveWeekCellsConfig(day, cell);
-  });
-};
-
-const setEmployeeCells = (telegram: TelegramSheetEditor, name: string) => {
-  return findName(telegram, name.replace(ENV.telegram.secretCode, ""));
-};
