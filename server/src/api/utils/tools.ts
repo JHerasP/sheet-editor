@@ -19,5 +19,5 @@ export function hasSecretCode(command: string) {
 }
 
 export function removeSecretCode(command: string) {
-  return `${command.replace(ENV.telegram.secretCode, "")}`;
+  return command.replace(ENV.telegram.secretCode, "");
 }
